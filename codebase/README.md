@@ -1,28 +1,17 @@
 # Nova — Student Command Center
 
-Prototype Streamlit quản lý công việc học tập bằng dữ liệu giả. Không gọi AI, Discord hay VLearn thật.
-
-## Cấu trúc
-
-```text
-codebase/
-├── app.py                 # Ứng dụng Streamlit hiện tại
-├── requirements.txt       # Thư viện cần cài
-├── .env.example           # Mẫu biến môi trường an toàn
-├── .streamlit/config.toml # Theme và cổng chạy local
-└── legacy_agent/          # Mã agent/eval cũ, tách riêng khỏi prototype
-```
+Streamlit agent đọc các file trong `data/discord-pack`, gọi Gemini để trích xuất việc cần làm, rồi áp guard đối chiếu đoạn trích nguồn trước khi hiển thị.
 
 ## Chạy local trên Windows
 
 ```powershell
-cd codebase
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-py -m pip install --upgrade pip
-py -m pip install -r requirements.txt
-Copy-Item .env.example .env
-streamlit run app.py
+1. cd codebase
+2. python -m venv .venv
+3. .venv\Scripts\Activate
+4. python -m pip install -r requirements.txt
+5. cp .env.example .env
+6. # Điền GOOGLE_API_KEY trong .env
+7. streamlit run app.py
 ```
 
 Nếu PowerShell chặn việc kích hoạt môi trường ảo, chỉ áp dụng cho cửa sổ hiện tại:
@@ -35,5 +24,6 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ## Điều kiện môi trường
 
 - `APP_ENV`: `development` hoặc `production` (mặc định: `development`).
-- `APP_DATA_MODE`: phải là `mock` vì bản này chỉ sử dụng dữ liệu giả.
+- `GEMINI_MODEL`: model Gemini để phân tích (mặc định `gemini-3.6-flash`).
+- `APP_DATA_MODE`: `live` để quét `data/discord-pack`; `mock` chỉ cho chế độ minh hoạ.
 - `.env` và `.streamlit/secrets.toml` không được commit.

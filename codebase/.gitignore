@@ -1,0 +1,19 @@
+.DS_Store
+node_modules/
+*.env
+
+# Python virtual environments and generated files
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Streamlit local configuration and runtime state
+.streamlit/secrets.toml
+codebase/logs/*.jsonl
+!codebase/logs/.gitkeep
