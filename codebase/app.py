@@ -178,7 +178,7 @@ with st.sidebar:
     total = len(sidebar_tasks)
     st.progress(total_done / total if total else 0, text=f"{total_done}/{total} việc hoàn thành")
     st.divider()
-    st.markdown('<div class="sidebar-status"><span class="green">●</span> 3 nguồn đang đồng bộ<br>Discord · VLearn · Calendar</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-status"><span class="green">●</span> 3 nguồn đang đồng bộ<br>Discord · Codelabs · Calendar</div>', unsafe_allow_html=True)
     st.divider()
     reference_date = st.date_input("Ngày tham chiếu", value=date(2026, 7, 30), format="DD/MM/YYYY")
     if st.button("Quét Discord bằng Gemini", type="primary", use_container_width=True):

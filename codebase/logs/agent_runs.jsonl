@@ -1,8 +1,2 @@
-{"at": "2026-07-30T12:48:24.524372+00:00", "model": "gemini-3.6-flash", "source_count": 29, "actions": 3, "needs_confirmation": 4}
-{"at": "2026-07-30T12:58:41.756174+00:00", "model": "gemini-3.6-flash", "source_count": 29, "actions": 0, "needs_confirmation": 4}
-{"at": "2026-07-30T13:02:39.864660+00:00", "model": "gemini-3.6-flash", "source_count": 29, "actions": 5, "needs_confirmation": 3}
-{"at": "2026-07-30T13:39:52.873313+00:00", "model": "gemini-3.6-flash", "source_count": 27, "actions": 4, "needs_confirmation": 1}
-{"at": "2026-07-30T13:42:36.144313+00:00", "model": "gemini-3.6-flash", "source_count": 27, "actions": 5, "needs_confirmation": 2}
-{"at": "2026-07-30T13:55:02.538458+00:00", "model": "gemini-3.6-flash", "source_count": 26, "actions": 5, "needs_confirmation": 2}
-{"at": "2026-07-30T14:05:17.016109+00:00", "model": "gemini-3.6-flash", "source_count": 26, "actions": 5, "needs_confirmation": 2}
-{"at": "2026-07-30T14:09:22.854643+00:00", "model": "gemini-3.6-flash", "source_count": 26, "actions": 5, "needs_confirmation": 1}
+{"at": "2026-07-30T18:45:26.218079+00:00", "model": "gemini-3.6-flash", "source_count": 29, "actions": 5, "needs_confirmation": 2, "ignored": 23}
+{"at": "2026-07-30T18:46:40.742712+00:00", "model": "gemini-3.6-flash", "source_count": 29, "actions": 5, "needs_confirmation": 2, "ignored": 23}
