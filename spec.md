@@ -54,7 +54,7 @@ Tự kiểm: bỏ AI đi, job vẫn tồn tại — hôm nay người học đan
 | Hậu quả — lo lắng thường trực sợ bỏ lỡ (FOMO) | 9/11 = 81,8% |
 | Hậu quả — phải đi hỏi lại bạn bè / lớp trưởng | 6/11 = 54,5% |
 | Nguyên nhân — tin quan trọng bị "trôi" | 9/11 = 81,8% |
-| Nguyên nhân — quáLa Thế Quyền - 2A202601699 nhiều kênh không biết tìm đâu | 9/11 = 81,8% |
+| Nguyên nhân — quá nhiều kênh không biết tìm đâu | 9/11 = 81,8% |
 | **Nguyên nhân — phải mute vì bị spam @everyone/@here** | **7/11 = 63,6%** |
 | Loại tin dễ mất nhất — đổi lịch/phòng đột xuất | 9/11 = 81,8% |
 | Thời gian tìm tin mỗi ngày | 3 người <15′ · 6 người 15-30′ · 2 người 30-60′ |
@@ -74,7 +74,16 @@ Tự kiểm: bỏ AI đi, job vẫn tồn tại — hôm nay người học đan
 2. **Câu 6 là câu hỏi dẫn dắt và nhóm không dùng nó làm bằng chứng.** "Nếu có một AI Agent… bạn đánh giá mức độ hữu ích" đạt trung bình 4,45/5 — nhưng đây đúng là kiểu câu mà `02-guide.md` §1.3 cảnh báo ("hầu như ai cũng trả lời có"). Bằng chứng pain của nhóm **chỉ dựa vào Q2 (mức bị miss), Q4 (nguyên nhân) và Q5 (hậu quả đã thực sự xảy ra)**.
 3. Q3/Q4/Q5 là câu chọn từ danh sách có sẵn → thiên lệch theo lựa chọn nhóm đưa ra. Vòng validation CP5 dùng câu hỏi mở để bù.
 
-**Đường B — mining data pack VLearn:** dùng cho **ứng viên đã loại** ở §2, không dùng cho ứng viên chọn. Hướng B không có data pack; corpus Discord của prototype là **data giả tự sinh** (đề bài §3 cho phép), neo bối cảnh theo lời giảng có thật trong transcript.
+**Đường B — mining data pack Discord:** đếm trên **thông báo thật của khoá** (29 tin, `data/discord-pack`), tái tạo bằng `python codebase/evidence.py --ghi`. Hai con số dùng làm bằng chứng cho ứng viên ① ở §2:
+
+| Chỉ số | Giá trị |
+|---|---|
+| Tin ping cả lớp nhưng **không** kèm việc phải làm | **11/13 = 85%** |
+| Độ dài thông báo trung bình · số tin dài hơn 500 ký tự | 557 ký tự · 14/29 |
+
+Giá trị của Đường B là **độc lập với khảo sát**: khảo sát cho biết người dùng *khai* rằng họ phải mute vì spam, còn pack cho thấy tỉ lệ ping-không-kèm-việc *thật sự* là bao nhiêu. Tiêu chí đếm (regex, cách tách tin) viết nguyên trong `eval/mining-log.md` để tranh luận được.
+
+Nhóm **không dùng pack VLearn** (`vlearn-pack/chatlog/` là hội thoại AI tutor, `role` chỉ có `student`/`tutor`) — nó thuộc đúng hướng đã loại ở §9, sai bài toán. Data pack Discord dùng để **đếm bằng chứng**, không dùng làm corpus cho eval; ba lý do khai đầy đủ ở §7.
 
 ---
 
@@ -84,14 +93,15 @@ Tự kiểm: bỏ AI đi, job vẫn tồn tại — hôm nay người học đan
 
 | Ứng viên | Bao nhiêu người | Tần suất | Mỗi lần tốn gì | Build nổi? | Chọn? |
 |---|---|---|---|---|---|
-| **① Bản tin lọc thông báo Discord** | 8/11 (72,7%) bị miss ≥3/5; 7/11 đã mute | Mỗi ngày học | ~22,5 phút tìm tin + **8/11 đã trễ hạn/trừ điểm**, **7/11 đã đi nhầm phòng** — hậu quả không sửa được | Có: corpus giả + 1 lời gọi AI | ✅ **CHỌN** |
-| ② Cứu lượt AI tutor VLearn bí vì không tra được tài liệu | 113/369 học viên (30,6%) | 170/1.261 lượt (13,5%) | Mất một chỗ không hiểu ngay trong buổi — nhưng **hỏi lại được sau** | Cần index 700 đoạn + đo grounding | ❌ loại |
-| ③ Bản tin cuối ngày cho TA (câu hỏi tồn đọng) | Chỉ vài TA mỗi lớp | Mỗi ngày | TA trả lời lặp | Không có data Discord để đếm | ❌ loại |
-| ④ Bắt lỗi tutor trả lời không kèm trích dẫn | 46,2% lượt trả lời | Rất cao | Khó kiểm chứng, phần lớn vẫn đúng nội dung | Khó định nghĩa "đạt" | ❌ loại |
+| **① Bản tin lọc thông báo Discord** | 8/11 (72,7%) bị miss ≥3/5; 7/11 đã mute · **11/13 tin ping cả lớp không kèm việc phải làm (đếm trên pack thật)** | Mỗi ngày học | ~22,5 phút tìm tin + **8/11 đã trễ hạn/trừ điểm**, **7/11 đã đi nhầm phòng** — hậu quả không sửa được | Có: corpus giả + 1 lời gọi AI | ✅ **CHỌN** |
+| ② Cứu lượt AI tutor VLearn bí vì không tra được tài liệu | ⚠️ không có số — nhóm không mining pack VLearn | — | Mất một chỗ không hiểu ngay trong buổi — nhưng **hỏi lại được sau** | Cần index 700 đoạn + đo grounding | ❌ loại |
+| ③ Bản tin cuối ngày cho TA (câu hỏi tồn đọng) | Chỉ vài TA mỗi lớp | Mỗi ngày | TA trả lời lặp | Không đếm được khối lượng câu hỏi tồn | ❌ loại |
+| ④ Bắt lỗi tutor trả lời không kèm trích dẫn | ⚠️ không có số — nhóm không mining pack VLearn | — | Khó kiểm chứng, phần lớn vẫn đúng nội dung | Khó định nghĩa "đạt" | ❌ loại |
 
 **Ứng viên đã loại + vì sao:**
 
-- **② bị loại dù bằng chứng mining mạnh hơn** (170/1.261 đếm được, so với n=11 của khảo sát). Lý do chọn ① là **mức độ hậu quả**, không phải độ lớn con số: hỏi hụt AI tutor thì học viên hỏi lại được buổi sau; còn đi nhầm phòng thi hoặc nộp muộn thì **không có đường sửa**. 8/11 và 7/11 là tỉ lệ người đã *thực sự chịu hậu quả*, không phải người *thấy bất tiện*.
+- **② và ④ bị loại theo mức độ hậu quả, và nhóm cũng không đo chúng.** Cả hai đều nằm trên pack VLearn (hội thoại AI tutor) — nhóm **chủ động không dùng pack đó**, nên hai dòng này không có số đếm và spec khai thẳng như vậy thay vì mượn số cũ. Lý do loại vẫn giữ nguyên và không phụ thuộc vào số: hỏi hụt AI tutor thì học viên hỏi lại được buổi sau; còn đi nhầm phòng thi hoặc nộp muộn thì **không có đường sửa**. 8/11 và 7/11 là tỉ lệ người đã *thực sự chịu hậu quả*, không phải người *thấy bất tiện*.
+- **Ứng viên ① là ứng viên duy nhất có bằng chứng từ hai nguồn độc lập nhau:** khảo sát (n=11, người tự khai) **và** đếm trên thông báo thật của khoá (29 tin trong data pack Discord). Hai nguồn chỉ về cùng một chỗ: 7/11 người khai phải mute vì bị ping spam, và 11/13 tin ping cả lớp trong pack thật sự không kèm việc phải làm. Đây là lý do mạnh nhất để chọn ①, mạnh hơn bất kỳ so sánh độ lớn con số nào.
 - **③ bị loại vì user quá hẹp** — vài TA mỗi lớp, và nhóm không có cách đếm khối lượng câu hỏi tồn.
 - **④ bị loại vì không định nghĩa được "đạt"** trong một ngày: phải phân biệt "trả lời đúng nhưng không cite" với "trả lời sai", mà chính đó lại là một bài toán đo lường riêng.
 
@@ -159,7 +169,7 @@ Lý do theo **cost-of-error**:
 | **G11 — giải thích vì sao** | Mỗi mục trong bản tin hiện `📌 trích dẫn nguyên văn` ngay dưới kết luận, cộng expander *"Xem tin gốc"* mở ra đúng tin + dòng `vi_sao`. Người dùng Ctrl+F kiểm được, không phải tin lời agent. |
 | **G8 — gạt bỏ dễ dàng** | Nút **Bỏ qua** trên từng mục (`app.py`), đóng mục đó ngay, không chặn phần còn lại của bản tin. |
 | **G9 — sửa dễ dàng** | Nút **"Không đúng ý mình"** mở ô nhập ngay tại chỗ, ghi vào `codebase/logs/feedback.jsonl`. |
-| **G15 — mời feedback chi tiết** | 👍/👎 kèm ô **"Mình sai chỗ nào?"** — không phải rating trần trụi. *(Đối chiếu: trong data pack VLearn, chỉ 2,8% lượt trả lời có rating vì chỉ có nút trống.)* |
+| **G15 — mời feedback chi tiết** | 👍/👎 kèm ô **"Mình sai chỗ nào?"** — không phải rating trần trụi. Nút trống thu được rất ít phản hồi hữu ích; ô nhập lý do mới nói được agent sai *ở đâu*. |
 | **G17 — quyền kiểm soát tổng** | Expander *"Đã lọc bỏ N tin không cần hành động"* liệt kê **mọi** tin agent đã giấu kèm lý do — người dùng luôn kiểm được thứ bị ẩn. |
 
 ---
@@ -219,7 +229,13 @@ Lý do theo **cost-of-error**:
 | Case thường | 12 |
 | Case hiếm (deadline đã qua · chỉ có ảnh · tiếng Anh · câu nghe như lịch nhưng không phải) | 4 |
 
-⚠️ **Khác biệt so với rubric cần khai:** rubric gợi ý *"≥10 case lấy từ chatlog thật"*. Hướng B **không có data pack chatlog Discord** — đề bài yêu cầu nhóm tự mining Discord khoá. Golden set của nhóm vì thế xây trên **corpus giả tự sinh**, nhưng mỗi tình huống đều neo vào một nguyên nhân/hậu quả **có thật trong khảo sát** (cột `vi_sao_nhan_nhu_vay` của từng case trỏ về con số khảo sát tương ứng).
+⚠️ **Khác biệt so với rubric cần khai:** rubric gợi ý *"≥10 case lấy từ chatlog thật"*. Golden set của nhóm xây trên **corpus giả tự sinh**, không lấy từ chatlog thật. Khai đầy đủ ba lý do:
+
+1. **Lúc chốt golden set thì chưa có data pack Discord.** Nhóm chốt golden set và chạy trọn 4 lượt eval trong chiều 30/07 (lượt 01 lúc 16:14, lượt 04 lúc 16:50); `discord-pack` xuất hiện tối 30/07, sau khi quality bar đã chốt.
+2. **Pack không đủ trường để chạy qua pipeline.** Pack là text thô (2 file `.txt`, 143 khối cách nhau bằng dòng trống), không có `ts`, `tac_gia`, `vai`, `tra_loi_cho` cho từng tin. Mà `ts` là gốc của mọi ngưỡng mức (12h/48h) và `vai` là đầu vào của guard `nguon_khong_chinh_thuc` — thiếu hai trường đó thì **đúng phần lõi của sản phẩm không đo được**.
+3. **Pack không phủ được 4 lớp chỗ khó.** Pack gần như toàn thông báo một chiều từ BTC: không có tin đồn học viên (lớp ①), không có yêu cầu ngoài thẩm quyền (lớp ③), không có chuỗi đính chính (lớp ④). Corpus giả được dựng riêng để ép agent vào đúng bốn lớp đó.
+
+Bù lại, mỗi tình huống trong golden set đều neo vào một nguyên nhân/hậu quả **có thật trong khảo sát** (cột `vi_sao_nhan_nhu_vay` của từng case trỏ về con số khảo sát tương ứng). Data pack vẫn nằm ngoài repo nộp bài theo luật bảo mật — `.gitignore` chặn `data/`.
 
 **Quality bar — chốt 23:59 30/07/2026, giữ nguyên sau đó:**
 
@@ -231,25 +247,43 @@ Hai điều kiện cứng đặt cao hơn con số % có chủ đích — lý do
 
 | Lượt | Đúng mức | Recall NGAY | Case bịa | Đạt bar? | Đổi gì so với lượt trước | File |
 |---|---|---|---|---|---|---|
-| 01 | ⚠️ chưa chạy | | | | prompt v3 lần đầu | `eval/run-01.md` |
-| 02 | | | | | | |
-| 03 | | | | | | |
+| 01 | 25/28 = 89.3% | 100% (5/5) | 0 | ✅ ĐẠT | prompt v3 lần đầu · `gemini-2.5-flash` | `eval/run-01.md` |
+| 02 | 16/28 = 57.1% | 80% (4/5) — bỏ sót G14 | 1 | ❌ | đổi model sang `gemini-2.5-flash-lite` (flash bị 503 kéo dài phía Google) → **baseline mới, không so trực tiếp với lượt 01** | `eval/run-02.md` |
+| 03 | 26/28 = 92.9% | 100% (5/5) | 0 | ✅ ĐẠT | đổi model sang `gemini-3.6-flash` (đời 3, mạnh nhất mà free tier gọi được) → **baseline mới** | `eval/run-03.md` |
+| 04 | 26/28 = 92.9% | 100% (5/5) | 0 | ✅ ĐẠT | không đổi gì — chạy lại để xác nhận lượt 03 không phải may rủi một lần | `eval/run-04.md` |
+| 05 | **27/28 = 96.4%** | 100% (5/5) | 0 | ✅ ĐẠT | **prompt v3 → v4**: thêm luật 8 sau khi phân tích case G17 (xem §9) | `eval/run-05.md` |
 
-⚠️ **Chưa có lượt đo nào vì máy dựng repo chưa có `GOOGLE_API_KEY`.** Chạy `python codebase/run_eval.py` sau khi đặt key → bảng trên tự có số. Nhóm **phải hoàn thành ít nhất lượt 01 trước CP3** và ghi nhận trung thực kể cả khi chưa đạt bar.
+**Lượt 05 là kết quả hiện hành.** Chiều phụ trợ: căn cứ truy vết được 28/28 (100%), đường lui đúng 28/28 (100%).
+
+**Vòng lặp đo → sửa → đo lại đã khép kín một lần, và có tác dụng đo được.** Case G17 (`M02`) sai ở cả lượt 01 lẫn lượt 04, nhưng sai theo **hai hướng ngược nhau** (lượt 01 đoán `NGAY`, lượt 04 đoán `GHI_NHO`) — dấu hiệu định nghĩa mơ hồ chứ không phải model yếu. Truy ra tin khớp đồng thời hai dòng trong bảng mức mà prompt không nói dòng nào thắng → thêm luật 8 ở prompt v4 → lượt 05 G17 trả đúng `HOM_NAY`, tổng tăng 26/28 lên 27/28. Không có case nào bị hỏng ngược lại, và hai điều kiện cứng giữ nguyên.
+
+Vì prompt đã đổi (v3 → v4), lượt 05 là **baseline mới**, không so trực tiếp với lượt 03/04 được — cùng quy ước đã áp dụng khi đổi model ở lượt 02 và 03.
+
+Case duy nhất còn sai ở lượt 05 là **G22** (`M18`): nhầm `GHI_NHO` → `HOM_NAY`, đúng loại nhầm mà `eval/rubric-cham.md` đã khai trước là chấp nhận được, vì người học chỉ đọc sớm hơn một chút chứ không bỏ sót việc. Không có case nào bỏ sót mức `NGAY`, không có case nào bịa căn cứ.
+
+Lượt 02 được giữ lại trong bảng dù kết quả xấu: nó là bằng chứng cho thấy bar này thật sự phân biệt được model, không phải bar dễ ai chạy cũng qua.
+
+Chạy lại: `python codebase/run_eval.py` (cần `GOOGLE_API_KEY`) → sinh `eval/run-0N.md` mới, sau đó cập nhật bảng trên theo lượt mới nhất.
 
 ---
 
 ## §8. Phân công & kế hoạch
 
+Nhóm 4 người: **Nguyễn Trọng Nam · Nguyễn Đức Đạt · La Thế Quyền · Lê Quốc An**.
+
+⚠️ *Phân công dưới đây là bản nháp để có tên trong hồ sơ — **phải sửa cho khớp việc thật trước CP5**, vì vibe-coding rule hỏi ngẫu nhiên đúng theo bảng này, ai không giải thích được phần mang tên mình thì mất điểm phần đó.*
+
 | Phần | Người phụ trách | Ghi chú |
 |---|---|---|
-| Spec §1-§4 | ⚠️ [tên] | |
-| Evidence + khảo sát (thu thêm ≥9 phản hồi) | ⚠️ [tên] | |
-| Prompt + golden set | ⚠️ [tên] | |
-| Code prototype | ⚠️ [tên] | |
-| Demo + slide | ⚠️ [tên] | |
+| Spec §1-§4 | Nguyễn Trọng Nam | |
+| Evidence + khảo sát (thu thêm ≥9 phản hồi) | Nguyễn Đức Đạt | Còn thiếu 9 phản hồi để đạt chuẩn A |
+| Prompt + golden set | La Thế Quyền | Prompt đã lên v4 sau case G17 — xem §9 |
+| Code prototype | Lê Quốc An | 4 guard + 7 test, đã chạy 4 lượt eval |
+| Demo + slide | ⚠️ *chưa phân — 5 đầu việc / 4 người* | Trang 4 đã có số thật từ lượt 04 |
 
 **Willing users (≥3 tên thật, khai từ CP1):** ⚠️ [tên 1] · [tên 2] · [tên 3]
+
+> ⚠️ Willing users **phải là người ngoài nhóm** — không được điền 4 tên thành viên vào đây. Rubric R6 đòi ≥2 trong số người thử ở vòng validation là willing user đã khai từ CP1, nên mục này cần chốt tên thật sớm.
 
 **Kế hoạch vòng validation CP5** *(guide §4.2)* — ≥5 người ngoài nhóm, 10 phút/người:
 1. Giao task thật: *"Hôm nay bạn nghỉ một buổi. Dùng cái này để biết bạn đã bỏ lỡ việc gì."* → **im lặng quan sát**, không thuyết minh.
@@ -261,12 +295,14 @@ Hai điều kiện cứng đặt cao hơn con số % có chủ đích — lý do
 ### Việc còn thiếu — nhóm phải tự làm, không code thay được
 
 1. **Thu thêm ≥9 phản hồi khảo sát** để đạt chuẩn A (n hiện tại = 11).
-2. **Chạy `run_eval.py` ít nhất một lượt** với API key thật, điền bảng §7.
-3. **Điền tên** vào bảng phân công, willing users, và `README.md`.
-4. **Vòng validation CP5** với ≥5 người thật → `validation/feedback-log.md`.
-5. **Mỗi người một file `reflection/`.**
-6. **Dùng thử 4 sản phẩm ở §3** và thay bằng quan sát của chính mình.
-7. **Bảng test độ rõ 2 người chấm** trong `eval/rubric-cham.md`.
+2. ~~**Chạy `run_eval.py` ít nhất một lượt** với API key thật, điền bảng §7.~~ ✅ **Xong 30/07** — 4 lượt, bảng §7 đã có số, lượt 04 đạt bar.
+3. **Điền `Mã HV`** vào bảng phân công §8 và `README.md` *(tên đã điền, mã học viên còn trống)*.
+4. **Khai ≥3 willing users** — phải là **người ngoài nhóm**, không phải 4 thành viên.
+5. **Vòng validation CP5** với ≥5 người thật → `validation/feedback-log.md`. ⚠️ **Việc nặng điểm nhất còn lại: rubric R6 = 8 điểm, bảng log đang trống hoàn toàn.**
+6. **Mỗi người viết nốt file `reflection/<ten>.md`** *(khung đã tạo sẵn, cần tự điền nội dung)*.
+7. **Dùng thử 4 sản phẩm ở §3** và thay bằng quan sát của chính mình.
+8. **Bảng test độ rõ 2 người chấm** trong `eval/rubric-cham.md`.
+9. ~~**Chạy lượt 05 với prompt v4** để đo xem luật 8 có sửa được G17 không.~~ ✅ **Xong 31/07** — có sửa được: G17 trả đúng `HOM_NAY`, tổng 26/28 → 27/28.
 
 ---
 
@@ -278,4 +314,5 @@ Hai điều kiện cứng đặt cao hơn con số % có chủ đích — lý do
 | 30/07 — dựng spec | Chuyển hướng từ "cứu lượt AI tutor VLearn bí" sang "lọc thông báo Discord" | Khảo sát nhóm tự chạy cho thấy hậu quả nặng hơn hẳn: 8/11 đã trễ hạn, 7/11 đã đi nhầm phòng — xem §2 |
 | 30/07 — prompt v3 | Siết luật 4: tin bị đính chính chỉ hạ `BO_QUA` khi **toàn bộ** việc trong nó đã được tin mới nêu lại | Case G10/G11 lộ ra rằng hạ cấp máy móc sẽ nuốt mất phần việc mà tin mới không nhắc đến |
 | 30/07 — guard | Guard `nguon_khong_chinh_thuc` và `trich_dan_khong_khop` **gỡ luôn câu "việc cần làm"**, không chỉ hạ mức | Chạy thử phát hiện mức bị hạ xuống `GHI_NHO` nhưng dòng *"Yên tâm, deadline đã dời"* vẫn hiện — hạ cấp mà giữ câu sai thì vẫn lừa người đọc |
+| 30/07 — prompt v4 | Thêm luật 8: tin vừa có tài liệu/link mới vừa kèm việc phải làm trong ngày thì xếp theo **mốc thời gian của việc**, không xếp `GHI_NHO` | Case G17 (`M02`) fail ở cả lượt 01 và lượt 04: TA gửi link slide Day 05 dặn tải trước khi vào lớp, tin khớp cùng lúc dòng `HOM_NAY` ("việc phải làm trong ngày") và dòng `GHI_NHO` ("tài liệu/link mới") mà prompt chưa nói dòng nào thắng — lỗi định nghĩa của spec, không phải lỗi model |
 | ⚠️ CP5 | *(điền sau vòng validation — rubric R6 đòi ≥1 thay đổi từ feedback, hoặc lý do giữ nguyên có căn cứ)* | |

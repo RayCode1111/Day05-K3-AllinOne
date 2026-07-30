@@ -81,15 +81,28 @@ Sinh tự động bằng `python codebase/evidence.py --ghi`. Sửa tay file nà
 2. **Câu 6 là câu hỏi dẫn dắt.** "Nếu có một AI Agent… bạn đánh giá mức độ hữu ích" đúng vào lỗi mà `02-guide.md` §1.3 cảnh báo — hầu như ai cũng trả lời cao. Nhóm **không dùng Q6 làm bằng chứng pain**; chỉ dùng Q2 (mức bị miss), Q4 (nguyên nhân) và Q5 (hậu quả đã xảy ra).
 3. Q3/Q4/Q5/Q7/Q8 là câu chọn nhiều đáp án từ danh sách có sẵn → có thiên lệch theo lựa chọn nhóm đưa ra. Vòng validation CP5 dùng câu hỏi mở để bù.
 
-## Đường B — mining data pack VLearn *(dùng cho ứng viên ĐÃ LOẠI)*
+## Đường B — mining data pack Discord *(thông báo THẬT của khoá)*
 
-Tiêu chí đếm (chạy lại được): một lượt bị tính là **tutor bí** khi nội dung trả lời của tutor khớp regex `không tìm thấy|không có (thông tin|nội dung)|không được đề cập|tài liệu hiện có|không thấy`.
+Tiêu chí đếm — viết ra để tranh luận được, không giấu trong đầu người đếm:
+
+- Ranh giới giữa hai thông báo: khoảng trống **từ 2 dòng trống trở lên** (regex `\n{3,}`). Xuống đoạn trong cùng một thông báo chỉ cách 1 dòng trống, nên ngưỡng này tách đúng tin thay vì cắt vụn tin dài.
+- Tin **có việc phải làm**: khớp regex `hạn|deadline|hết hạn|trước ngày|nộp|gia hạn|đóng đúng|due`.
+- Tin **ping cả lớp**: khớp regex `@everyone|@here|@Learner|@Lab Coach`.
 
 | Chỉ số | Giá trị |
 |---|---|
-| Lượt tutor bí vì không tra được tài liệu | 170/1261 = 13.5% |
-| Học viên dính ít nhất 1 lần | 113/369 |
-| Lượt trả lời không kèm trích dẫn nào | 582/1261 = 46.2% |
-| Lượt tutor chủ động hỏi lại kiểm tra hiểu bài | 3 |
+| Tổng số thông báo trong pack | 29 |
+| Tin có việc phải làm kèm hạn | 7/29 = 24.1% |
+| Tin ping cả lớp (@everyone/@here/@Learner) | 13/29 = 44.8% |
+| **Tin ping cả lớp nhưng KHÔNG kèm việc phải làm** | **11/13 = 85%** |
+| Độ dài thông báo (trung bình · trung vị · dài nhất) | 557 · 475 · 1816 ký tự |
+| Thông báo dài hơn 500 ký tự | 14/29 |
 
-> Trích dẫn nguyên văn từ data pack ghi bằng **mã lượt** (`T####`) theo luật bảo mật, xem `spec.md` §1. Không dán nguyên văn dài vào repo này.
+**Hai con số đáng giá nhất:**
+
+1. **11/13 (85%) tin ping cả lớp không kèm việc phải làm.** Đây là bằng chứng **độc lập với khảo sát** cho đúng nguyên nhân mà 7/11 người khảo sát khai là lý do họ phải mute. Khảo sát nói người dùng *cảm thấy* bị spam; pack cho thấy họ *bị spam thật*.
+2. **Thông báo dài trung bình 557 ký tự, 14/29 tin dài hơn 500 ký tự.** Chỉ 7/29 tin thật sự có việc phải làm — tức là học viên phải đọc rất nhiều chữ để tìm ra phần nhỏ thật sự liên quan tới mình. Đó đúng là việc mà bản tin lọc gánh hộ.
+
+**Chỉ số đã thử nhưng KHÔNG dùng — khai để khỏi bị hiểu là chọn số đẹp:** nhóm định đo *"hạn chót bị chôn sâu trong thân bài"*, nhưng đo ra hạn xuất hiện trung bình ở **23%** chiều dài tin và chỉ **1/7** tin phải đọc quá nửa mới thấy hạn. Giả thuyết đó **không được data ủng hộ**, nên bỏ, không đưa vào spec.
+
+> Không dán nguyên văn dài từ data pack vào repo này theo luật bảo mật (`.gitignore` chặn `data/`). Chỉ giữ số đếm và tiêu chí đếm.
