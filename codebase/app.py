@@ -1,15 +1,17 @@
-"""Nova — Student Command Center (prototype dữ liệu giả, không gọi AI/API)."""
+"""Nova — trợ lý chủ động cho học viên: rà soát Discord + đối chiếu bài nộp Codelabs."""
 
 import os
 import html
-import time
 from pathlib import Path
-from datetime import date
+from datetime import date, datetime
 
 from dotenv import load_dotenv
 import streamlit as st
-import streamlit.components.v1 as components
-from discord_agent import load_announcements, scan
+
+import codelab
+import discord_store
+import discord_agent
+from discord_agent import scan
 
 APP_DIR = Path(__file__).resolve().parent
 load_dotenv(APP_DIR / ".env")
@@ -18,6 +20,8 @@ if os.getenv("APP_ENV", "development") not in {"development", "production"}:
     raise RuntimeError("APP_ENV must be development or production.")
 if os.getenv("APP_DATA_MODE", "live") not in {"mock", "live"}:
     raise RuntimeError("APP_DATA_MODE must be mock or live.")
+
+STUDENT_ID = os.getenv("CODELABS_STUDENT_ID", "K3-00123")
 
 st.set_page_config(page_title="Nova — Student Command Center", page_icon="✦", layout="wide")
 
@@ -32,11 +36,12 @@ st.markdown("""
   .eyebrow{color:#6456e8;font-size:11px;font-weight:850;letter-spacing:1px;text-transform:uppercase}.title{font-size:29px;font-weight:850;letter-spacing:-1.2px;margin:4px 0 14px}
   .card{background:#fff;border:1px solid #e5e9f2;border-radius:16px;padding:17px 18px;margin-bottom:13px;box-shadow:0 5px 18px rgba(30,48,83,.035)}
   .hero{background:linear-gradient(118deg,#30276f,#5a4fd1 59%,#7681ef);border:0;color:#fff;padding:20px 22px}.hero h2{font-size:18px;margin:0 0 5px}.hero p{font-size:13px;line-height:1.55;margin:0;color:#f0efff}.chip{display:inline-block;border:1px solid rgba(255,255,255,.27);border-radius:99px;padding:5px 8px;margin:13px 4px 0 0;font-size:11px}
-  .metric{background:#fff;border:1px solid #e5e9f2;border-radius:13px;padding:13px}.metric b{font-size:23px;letter-spacing:-1px}.metric span{display:block;font-size:11px;color:#68738a;margin-top:3px}
   .section-title{font-size:17px;font-weight:850;margin:0}.sub{font-size:12px;color:#68738a;margin:3px 0 12px}.task-title{font-size:14px;font-weight:800}.task-detail{color:#68738a;font-size:12px;margin-top:3px}.task-source{color:#6456d8;font-size:11px;font-weight:750;margin-top:5px}.badge{font-size:10px;font-weight:850;padding:5px 7px;border-radius:99px;text-align:center;margin-top:4px;white-space:nowrap}.urgent{color:#bd3039;background:#fff0f0}.today{color:#a35718;background:#fff4e9}.done{color:#16825b;background:#eaf9f3}
-  .next{background:#fffbf1;border-color:#ffedc4}.next-time{font-size:27px;color:#c56621;font-weight:850;letter-spacing:-1px;margin:3px 0}.next h3{font-size:16px;margin:3px 0}.next p{font-size:12px;color:#68738a;line-height:1.45;margin:4px 0 11px}.plan{border-left:3px solid #ff8a4c;padding-left:11px;margin:12px 0}.plan b{font-size:12px}.plan p{font-size:11px;color:#68738a;line-height:1.4;margin:2px 0}
-  .source-name{font-size:13px;font-weight:800}.source-meta{font-size:11px;color:#68738a;margin-top:2px}.verified{font-size:10px;color:#16825b;font-weight:850}.sidebar-status{font-size:12px;color:#68738a;line-height:1.6}.green{color:#20a675}
+  .next{background:#fffbf1;border-color:#ffedc4}.next h3{font-size:16px;margin:3px 0}.next p{font-size:12px;color:#68738a;line-height:1.45;margin:4px 0 11px}.plan{border-left:3px solid #ff8a4c;padding-left:11px;margin:12px 0}.plan b{font-size:12px}.plan p{font-size:11px;color:#68738a;line-height:1.4;margin:2px 0}
+  .lab{border-left:4px solid #e0e4ee}.lab.miss{border-left-color:#e2564f;background:#fff7f6}.lab.ok{border-left-color:#20a675;background:#f4fcf8}.lab h3{font-size:15px;font-weight:850;margin:2px 0 4px}.lab p{font-size:12px;color:#68738a;margin:0;line-height:1.5}
+  .sidebar-status{font-size:12px;color:#68738a;line-height:1.6}.green{color:#20a675}
   .question-box{background:#f7f4ff;border-left:3px solid #7666e9;border-radius:7px;padding:11px 13px;color:#293650;font-size:13px;line-height:1.5;margin:12px 0}
+  .msg-meta{font-size:11px;color:#68738a;font-weight:700;margin-bottom:4px}
   div[data-testid="stRadio"] > div {gap:7px} div[data-testid="stRadio"] label {background:#fff;border:1px solid #e1e5ef;border-radius:9px;padding:7px 12px;margin:0!important;font-size:13px;font-weight:750} div[data-testid="stRadio"] label:has(input:checked){background:#eeeaff;border-color:#d8d1ff;color:#5144c6}
   div[data-testid="stButton"] button{border-radius:9px;font-weight:750} [data-testid="stSidebar"] .stRadio label{background:transparent;border:0;padding:6px 2px}
 </style>
@@ -44,15 +49,22 @@ st.markdown("""
 
 st.session_state.setdefault("agent_result", None)
 st.session_state.setdefault("agent_source_count", 0)
+st.session_state.setdefault("scanned_ids", set())
 st.session_state.setdefault("selected_source", None)
-st.session_state.setdefault("focus_task_id", None)
-st.session_state.setdefault("focus_end_at", None)
 st.session_state.setdefault("completed_task_ids", set())
-SOURCE_BY_ID = {item["id"]: item for item in load_announcements()}
+st.session_state.setdefault("codelab_status", None)
+st.session_state.setdefault("scan_error", None)
+st.session_state.setdefault("show_discord", False)
+
+MESSAGES = discord_store.all_messages()
+SOURCE_BY_ID = {item["id"]: item for item in MESSAGES}
+# "Mới" = thông báo vừa được đẩy lên mà Nova chưa đọc ở lần kiểm tra nào — data
+# pack là nền có sẵn nên không tính vào đây.
+UNREAD = [item for item in MESSAGES if item["origin"] == "inbox" and item["id"] not in st.session_state.scanned_ids]
 
 
 def current_tasks() -> list[dict]:
-    """Use Gemini output once available; otherwise show transparent sample data."""
+    """Chỉ hiển thị việc do Gemini trả về và đã qua guard grounding."""
     result = st.session_state.agent_result
     if not result:
         return []
@@ -76,24 +88,105 @@ def set_done(task_id: str, completed: bool) -> None:
         st.session_state.completed_task_ids.discard(task_id)
 
 
+def refresh_today(reference_date: str) -> None:
+    """Một hành động duy nhất kéo về mọi thứ màn Hôm nay cần: Codelabs + Discord.
+
+    Lỗi quét được giữ trong session state chứ không in ngay: màn hình rerun sau
+    khi hàm này chạy xong, thông báo in tại chỗ sẽ bị xoá trước khi ai kịp đọc.
+    """
+    st.session_state.codelab_status = codelab.check_submission(STUDENT_ID, reference_date)
+    try:
+        st.session_state.agent_result, st.session_state.agent_source_count = scan(reference_date)
+        st.session_state.scanned_ids = {item["id"] for item in discord_store.all_messages()}
+        st.session_state.scan_error = None
+        st.toast("Đã cập nhật Codelabs và danh sách việc từ Discord.")
+    except RuntimeError as error:
+        st.session_state.agent_result = None
+        st.session_state.scan_error = str(error)
+
+
 @st.dialog("Thông báo Discord gốc")
 def source_dialog(source_id: str) -> None:
     item = SOURCE_BY_ID.get(source_id)
     if not item:
-        st.warning("Không tìm thấy thông báo nguồn trong discord-pack.")
+        st.warning("Không tìm thấy thông báo nguồn trong kho của Nova.")
         return
-    st.caption(source_id)
+    st.caption(f"#{item['channel']} · {item['author']}" + (f" · {item['date']}" if item.get("date") else ""))
     st.text(item["text"])
     if st.button("Đóng", use_container_width=True):
-        st.session_state.selected_source = None
+        st.rerun()
+
+
+@st.dialog("Discord — mô phỏng thông báo mới", width="large")
+def discord_dialog(default_date: date) -> None:
+    """Cửa sổ đứng thay cho Discord thật: LabCoach/BTC đăng gì, Nova lưu lại cái đó."""
+    st.caption("Mô phỏng việc LabCoach đăng tài liệu hoặc BTC đẩy thông báo lên kênh. Nội dung gửi ở đây được lưu vào kho của Nova và sẽ được đọc ở lần “Kiểm tra hôm nay” kế tiếp.")
+    names = [channel["name"] for channel in discord_store.CHANNELS]
+    picked = st.radio("Kênh", names, horizontal=True, key="discord_channel")
+    channel = discord_store.CHANNELS[names.index(picked)]
+
+    with st.form(f"push_{channel['id']}", clear_on_submit=True):
+        author_column, date_column = st.columns([1.3, 1])
+        author = author_column.text_input("Người gửi", value="Lab Coach")
+        posted_at = date_column.date_input("Ngày đăng", value=default_date, format="DD/MM/YYYY")
+        text = st.text_area("Nội dung thông báo", height=150, placeholder="VD: Slide ngày 3 đã upload lên vlearn.dev. Bài lab hôm nay đóng đúng 23:59, không mở lại.")
+        submitted = st.form_submit_button(f"Đẩy lên #{channel['name']}", type="primary", use_container_width=True)
+    if submitted:
+        if not text.strip():
+            st.warning("Nhập nội dung thông báo trước khi đẩy.")
+        else:
+            discord_store.add_message(channel["id"], author, text, posted_at.strftime("%d/%m/%Y"))
+            st.toast(f"Đã lưu thông báo vào #{channel['name']}.")
+            # rerun trong phạm vi fragment: vẽ lại danh sách mà cửa sổ vẫn mở.
+            st.rerun(scope="fragment")
+
+    channel_messages = discord_store.messages_of(channel["id"])
+    added = [item for item in channel_messages if item["origin"] == "inbox"]
+    from_pack = [item for item in channel_messages if item["origin"] == "pack"]
+    st.markdown(f'<div class="section-title" style="margin-top:6px">Thông báo trong #{channel["name"]}</div><div class="sub">{len(added)} thông báo mô phỏng · {len(from_pack)} thông báo từ data pack</div>', unsafe_allow_html=True)
+    for item in reversed(added):
+        with st.container(border=True):
+            body, action = st.columns([7, 1.2], vertical_alignment="center")
+            body.markdown(f'<div class="msg-meta">{html.escape(item["author"])} · {item["date"]} · {item["id"]}</div>', unsafe_allow_html=True)
+            body.text(item["text"])
+            if action.button("Xoá", key=f"drop_{item['id']}", use_container_width=True):
+                discord_store.delete_message(item["id"])
+                st.rerun(scope="fragment")
+    if from_pack:
+        with st.expander(f"Xem {len(from_pack)} thông báo có sẵn trong data pack"):
+            for item in from_pack:
+                st.markdown(f'<div class="msg-meta">{item["author"]} · {item["date"]} · {item["id"]}</div>', unsafe_allow_html=True)
+                st.text(item["text"])
+                st.divider()
+    if st.button("Đóng cửa sổ", use_container_width=True):
+        st.rerun()
+
+
+def codelab_card(reference_date: str) -> None:
+    """Kết quả gọi API Codelabs: chưa nộp thì đưa thẳng link và nút xác nhận."""
+    status = st.session_state.codelab_status
+    st.markdown('<div class="section-title">Bài nộp Codelabs</div>', unsafe_allow_html=True)
+    if not status:
+        st.markdown('<div class="sub">Nova sẽ gọi Codelabs để đối chiếu bạn đã nộp bài của ngày tham chiếu chưa.</div>', unsafe_allow_html=True)
+        return
+    window = f'Mở {status["open_at"]} · hạn {status["due_at"]} · {status["source"]}'
+    if status["submitted"]:
+        st.markdown(f'<div class="card lab ok"><h3>✓ Đã nộp — {status["lab_title"]}</h3><p>{window}</p></div>', unsafe_allow_html=True)
+        return
+    st.markdown(f'<div class="card lab miss"><h3>⚠ Chưa nộp — {status["lab_title"]}</h3><p>{window}. Nộp trước {status["due_at"]} hôm nay, nộp trễ bị trừ điểm theo thông báo của BTC.</p></div>', unsafe_allow_html=True)
+    open_column, confirm_column = st.columns(2)
+    open_column.link_button("Mở Codelabs để nộp bài ↗", status["url"], use_container_width=True)
+    if confirm_column.button("Tôi đã nộp — kiểm tra lại", use_container_width=True):
+        with st.spinner("Đang xác nhận với Codelabs…"):
+            st.session_state.codelab_status = codelab.confirm_submission(STUDENT_ID, reference_date)
         st.rerun()
 
 
 def hero_content() -> str:
     result = st.session_state.agent_result
     if not result:
-        return '<div class="card hero"><h2>Nova sẽ giúp bạn rà soát thông tin</h2><p>Chọn ngày tham chiếu và bấm “Quét Discord bằng Gemini”. Nova sẽ đọc thông báo, kiểm tra căn cứ và chỉ đưa việc đã xác thực vào danh sách.</p><span class="chip">Sẵn sàng quét Discord</span></div>'
-    return f'<div class="card hero"><h2>Nova đã rà soát thông tin thành công</h2><p>{result.get("summary", "Nova đã tổng hợp các thông báo quan trọng.")}</p><span class="chip">✓ Đã đọc {st.session_state.agent_source_count} cụm thông báo</span><span class="chip">✓ {len(result.get("action_items", []))} việc có căn cứ</span><span class="chip">⚠ {len(result.get("needs_confirmation", []))} mục cần xác nhận</span></div>'
+        return '<div class="card hero"><h2>Nova sẽ giúp bạn rà soát thông tin</h2><p>Chọn ngày tham chiếu rồi bấm “Kiểm tra hôm nay”. Nova gọi Codelabs xem bạn đã nộp bài chưa, đọc thông báo Discord, kiểm tra căn cứ và chỉ đưa việc đã xác thực vào danh sách.</p></div>'
+    return f'<div class="card hero"><h2>Nova đã rà soát thông tin thành công</h2><p>{result.get("summary", "Nova đã tổng hợp các thông báo quan trọng.")}</p><span class="chip">✓ Đã đọc {st.session_state.agent_source_count} thông báo</span><span class="chip">✓ {len(result.get("action_items", []))} việc có căn cứ</span><span class="chip">⚠ {len(result.get("needs_confirmation", []))} mục cần xác nhận</span></div>'
 
 
 def plan_content() -> str:
@@ -107,27 +200,8 @@ def plan_content() -> str:
     return f'<div class="card"><div class="section-title">Kế hoạch đề xuất</div>{plans}</div>'
 
 
-def countdown(end_at: float) -> None:
-    """Client-side countdown keeps updating without repeatedly calling Gemini."""
-    target_ms = int(end_at * 1000)
-    components.html(
-        f"""<div id="timer" style="font:800 30px Inter,system-ui,sans-serif;color:#5144c6;padding:6px 0">--:--</div>
-        <script>
-        const target = {target_ms};
-        function tick() {{
-          const seconds = Math.max(0, Math.ceil((target - Date.now()) / 1000));
-          const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
-          const rest = String(seconds % 60).padStart(2, '0');
-          document.getElementById('timer').textContent = seconds ? `${{minutes}}:${{rest}}` : 'Đã hết giờ';
-        }}
-        tick(); setInterval(tick, 1000);
-        </script>""",
-        height=55,
-    )
-
-
 def task_row(task: dict, completed: bool) -> None:
-    """A task is rendered in exactly one list, based on its current checkbox state."""
+    """Mỗi việc chỉ nằm ở đúng một danh sách, theo trạng thái checkbox hiện tại."""
     check, body, badge = st.columns([0.45, 6.7, 1.25], vertical_alignment="top")
     with check:
         checked = st.checkbox("Hoàn thành", value=completed, key=f"task_toggle_{task['id']}", label_visibility="collapsed")
@@ -135,7 +209,7 @@ def task_row(task: dict, completed: bool) -> None:
     with body:
         title_style = "text-decoration:line-through;color:#9ba3b3" if completed else ""
         evidence = task.get("evidence", "")
-        evidence_html = f'<div class="task-detail">Căn cứ: “{evidence}”</div>' if evidence else ""
+        evidence_html = f'<div class="task-detail">Căn cứ: “{html.escape(evidence)}”</div>' if evidence else ""
         st.markdown(
             f'<div class="task-title" style="{title_style}">{task["title"]}</div>'
             f'<div class="task-detail">{task["detail"]}</div>'
@@ -152,7 +226,7 @@ def task_row(task: dict, completed: bool) -> None:
     st.divider()
 
 
-def task_lists(compact: bool = False) -> None:
+def task_lists() -> None:
     tasks = current_tasks()
     pending = [task for task in tasks if not is_done(task)]
     done = [task for task in tasks if is_done(task)]
@@ -163,11 +237,10 @@ def task_lists(compact: bool = False) -> None:
             task_row(task, completed=False)
     else:
         st.info("Nova sẽ điền danh sách việc sau khi rà soát thông báo Discord." if not st.session_state.agent_result else "Bạn đã hoàn thành toàn bộ việc hôm nay.")
-    if not compact:
-        st.markdown('<div class="section-title" style="margin-top:17px">Đã hoàn thành</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="sub">{len(done)} việc · bỏ tick để đưa việc trở lại danh sách cần làm</div>', unsafe_allow_html=True)
-        for task in done:
-            task_row(task, completed=True)
+    st.markdown('<div class="section-title" style="margin-top:17px">Đã hoàn thành</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="sub">{len(done)} việc · bỏ tick để đưa việc trở lại danh sách cần làm</div>', unsafe_allow_html=True)
+    for task in done:
+        task_row(task, completed=True)
 
 
 with st.sidebar:
@@ -178,93 +251,75 @@ with st.sidebar:
     total = len(sidebar_tasks)
     st.progress(total_done / total if total else 0, text=f"{total_done}/{total} việc hoàn thành")
     st.divider()
-    st.markdown('<div class="sidebar-status"><span class="green">●</span> 3 nguồn đang đồng bộ<br>Discord · Codelabs · Calendar</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="sidebar-status"><span class="green">●</span> 2 nguồn đang đồng bộ<br>Discord ({len(MESSAGES)} thông báo) · Codelabs</div>', unsafe_allow_html=True)
     st.divider()
     reference_date = st.date_input("Ngày tham chiếu", value=date(2026, 7, 30), format="DD/MM/YYYY")
-    if st.button("Quét Discord bằng Gemini", type="primary", use_container_width=True):
-        with st.spinner("Đang đọc thông báo, phân tích và kiểm tra căn cứ…"):
-            try:
-                st.session_state.agent_result, st.session_state.agent_source_count = scan(reference_date.isoformat())
-                st.toast("Đã tạo danh sách việc từ Discord.")
-                st.rerun()
-            except RuntimeError as error:
-                st.error(str(error))
-    if st.button("Xoá kết quả quét", use_container_width=True):
+    if st.button("Đặt lại phiên demo", use_container_width=True):
         st.session_state.agent_result = None
         st.session_state.agent_source_count = 0
+        st.session_state.scanned_ids = set()
+        st.session_state.completed_task_ids = set()
+        st.session_state.codelab_status = None
+        st.session_state.scan_error = None
+        codelab.reset()
+        discord_agent.clear_cache()
         st.rerun()
 
-header, avatar = st.columns([14, 1])
+reference_iso = reference_date.isoformat()
+
+header, discord_button, avatar = st.columns([11, 2.6, 0.8], vertical_alignment="center")
 with header:
-    st.markdown('<div class="eyebrow">Thứ tư, 30 tháng 7</div><div class="title">Chào Bro, hôm nay mình cùng hoàn thành công việc nhé!</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="eyebrow">{reference_date.strftime("%d/%m/%Y")}</div><div class="title">Chào Bro, hôm nay mình cùng hoàn thành công việc nhé!</div>', unsafe_allow_html=True)
+with discord_button:
+    label = f"💬 Discord · {len(UNREAD)} mới" if UNREAD else "💬 Discord"
+    if st.button(label, use_container_width=True):
+        st.session_state.show_discord = True
+        st.rerun()
 with avatar:
     st.markdown("<div style='background:#17223a;color:white;border-radius:50%;width:37px;height:37px;display:grid;place-items:center;font-size:12px;font-weight:800'>LN</div>", unsafe_allow_html=True)
 
-page = st.radio("Điều hướng", ["Hôm nay", "Công việc của tôi", "Cần xác thực"], horizontal=True, label_visibility="collapsed")
+page = st.radio("Điều hướng", ["Hôm nay", "Cần xác thực"], horizontal=True, label_visibility="collapsed")
 st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
 if page == "Hôm nay":
     left, right = st.columns([1.65, .85], gap="large")
     with left:
         st.markdown(hero_content(), unsafe_allow_html=True)
-        task_lists(compact=False)
+        action, hint = st.columns([1.1, 1.9], vertical_alignment="center")
+        if action.button("Kiểm tra hôm nay", type="primary", use_container_width=True):
+            with st.spinner("Đang gọi Codelabs, đọc thông báo Discord và kiểm tra căn cứ…"):
+                refresh_today(reference_iso)
+            st.rerun()
+        if UNREAD and st.session_state.agent_result:
+            hint.caption(f"Có {len(UNREAD)} thông báo mới chưa được đọc — kiểm tra lại để Nova cập nhật.")
+        elif st.session_state.codelab_status:
+            checked_at = datetime.fromisoformat(st.session_state.codelab_status["checked_at"]).astimezone()
+            meta = (st.session_state.agent_result or {}).get("meta", {})
+            source = "dùng lại kết quả đã lưu, không tốn quota" if meta.get("cached") else meta.get("model", "")
+            hint.caption(f"Cập nhật lúc {checked_at.strftime('%H:%M')}" + (f" · {source}" if source else ""))
+        if st.session_state.scan_error:
+            st.warning(f"Đã lấy được trạng thái Codelabs, nhưng chưa quét được Discord: {st.session_state.scan_error}")
+        st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
+        codelab_card(reference_iso)
+        st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+        task_lists()
     with right:
+        status = st.session_state.codelab_status
         pending = [task for task in current_tasks() if not is_done(task)]
-        if pending:
+        if status and not status["submitted"]:
+            st.markdown(f'<div class="card next"><div class="eyebrow" style="color:#bd6826">Việc kế tiếp</div><h3>Nộp {status["lab_title"]} trên Codelabs</h3><p>Chưa ghi nhận bài nộp · hạn {status["due_at"]} hôm nay.</p></div>', unsafe_allow_html=True)
+        elif pending:
             next_task = pending[0]
             st.markdown(f'<div class="card next"><div class="eyebrow" style="color:#bd6826">Việc kế tiếp</div><h3>{next_task["title"]}</h3><p>{next_task["detail"]}</p></div>', unsafe_allow_html=True)
-            if st.button("Tập trung vào việc này →", type="primary", use_container_width=True):
-                st.session_state.focus_task_id = next_task["id"]
-                st.toast("Đã chọn việc ưu tiên trong Công việc của tôi.")
         else:
-            st.markdown('<div class="card next"><div class="eyebrow" style="color:#bd6826">Việc kế tiếp</div><h3>Chưa có việc để đề xuất</h3><p>Nova sẽ đề xuất việc ưu tiên sau khi Gemini quét thông báo.</p></div>', unsafe_allow_html=True)
+            st.markdown('<div class="card next"><div class="eyebrow" style="color:#bd6826">Việc kế tiếp</div><h3>Chưa có việc để đề xuất</h3><p>Nova sẽ đề xuất việc ưu tiên sau khi kiểm tra Codelabs và quét thông báo.</p></div>', unsafe_allow_html=True)
         st.markdown(plan_content(), unsafe_allow_html=True)
-
-elif page == "Công việc của tôi":
-    page_tasks = current_tasks()
-    if not st.session_state.agent_result:
-        st.info("Chưa có công việc nào. Hãy quét Discord bằng Gemini để Nova tạo kế hoạch thực thi cá nhân.")
-    else:
-        pending = [task for task in page_tasks if not is_done(task)]
-        done = [task for task in page_tasks if is_done(task)]
-        metric_1, metric_2, metric_3 = st.columns(3)
-        metric_1.markdown(f'<div class="metric"><b>{len(pending)}</b><span>Việc còn lại</span></div>', unsafe_allow_html=True)
-        metric_2.markdown(f'<div class="metric"><b>{sum(task["tag"] == "Cần làm ngay" for task in pending)}</b><span>Việc cần ưu tiên</span></div>', unsafe_allow_html=True)
-        metric_3.markdown(f'<div class="metric"><b>{len(done)}</b><span>Đã hoàn thành</span></div>', unsafe_allow_html=True)
-        st.markdown("<div style='height:16px'></div><div class='section-title'>Phiên tập trung</div><div class='sub'>Chọn một việc để Nova giữ trọng tâm cho phiên làm việc hiện tại.</div>", unsafe_allow_html=True)
-        if pending:
-            options = {task["title"]: task for task in pending}
-            selected_title = st.selectbox("Việc đang tập trung", list(options), label_visibility="collapsed")
-            selected = options[selected_title]
-            duration = st.select_slider("Thời lượng tập trung", options=[15, 25, 45, 60, 90], value=25, format_func=lambda minutes: f"{minutes} phút")
-            if st.button(f"Bắt đầu phiên {duration} phút", type="primary"):
-                st.session_state.focus_task_id = selected["id"]
-                st.session_state.focus_end_at = time.time() + duration * 60
-                st.toast(f"Đã bắt đầu phiên tập trung {duration} phút.")
-            focused = next((task for task in pending if task["id"] == st.session_state.focus_task_id), selected)
-            st.markdown(f'<div class="card"><div class="eyebrow">Đang tập trung</div><div class="section-title">{focused["title"]}</div><div class="sub">{focused["detail"]}</div></div>', unsafe_allow_html=True)
-            if st.session_state.focus_task_id == focused["id"] and st.session_state.focus_end_at:
-                st.caption("Thời gian còn lại của phiên tập trung")
-                countdown(st.session_state.focus_end_at)
-            if st.button("Đánh dấu hoàn thành việc đang tập trung"):
-                set_done(focused["id"], True)
-                st.session_state.focus_task_id = None
-                st.session_state.focus_end_at = None
-                st.rerun()
-        else:
-            st.success("Bạn đã hoàn thành các việc Nova xác thực được.")
-        st.markdown('<div class="section-title" style="margin-top:18px">Nhật ký hoàn thành</div>', unsafe_allow_html=True)
-        if done:
-            for task in done:
-                st.markdown(f'✓ **{task["title"]}** · {task["source"]}')
-        else:
-            st.caption("Chưa có việc hoàn thành trong lần quét này.")
 
 else:
     st.markdown('<div class="section-title">Cần xác thực</div><div class="sub">Chỉ hiển thị thông tin thiếu dữ kiện, mâu thuẫn ngày giờ hoặc chưa đủ rõ để Nova đưa vào danh sách việc.</div>', unsafe_allow_html=True)
     result = st.session_state.agent_result
     if not result:
-        st.info("Nova sẽ tập hợp các câu hỏi cần xác thực với LabCoach/BTC sau khi bạn quét Discord.")
+        st.info("Nova sẽ tập hợp các câu hỏi cần xác thực với LabCoach/BTC sau khi bạn bấm “Kiểm tra hôm nay”.")
     else:
         confirmations = result.get("needs_confirmation", [])
         if not confirmations:
@@ -279,5 +334,13 @@ else:
                     st.session_state.selected_source = item.get("source_id")
                     st.rerun()
 
+# Cờ mở cửa sổ chỉ có tác dụng đúng một lượt chạy. Streamlit không báo lại khi
+# người dùng đóng dialog bằng nút ✕, nên nếu giữ cờ True thì mọi tương tác sau
+# đó (tick hoàn thành một việc chẳng hạn) sẽ làm cửa sổ tự bật lên lại.
 if st.session_state.selected_source:
-    source_dialog(st.session_state.selected_source)
+    source_id = st.session_state.selected_source
+    st.session_state.selected_source = None
+    source_dialog(source_id)
+elif st.session_state.show_discord:
+    st.session_state.show_discord = False
+    discord_dialog(reference_date)

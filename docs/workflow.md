@@ -106,7 +106,7 @@ Mỗi mốc dưới đây trả lời 5 câu: **ý nghĩa** (vì sao mốc này 
 
 **TA tích:** ☐ flow chính bấm hết được ☐ repo có commit.
 
-**Trong repo này:** [codebase/app.py](../codebase/app.py) (Streamlit, 3 tab: *Hôm nay* · *Công việc của tôi* · *Cần xác thực*) — commit `da795a0 complete ui/ux of agent`.
+**Trong repo này:** [codebase/app.py](../codebase/app.py) (Streamlit, 2 tab: *Hôm nay* · *Cần xác thực*, kèm cửa sổ mô phỏng Discord) — commit `da795a0 complete ui/ux of agent`.
 
 ---
 
@@ -219,12 +219,13 @@ Hai điều kiện cứng cố ý đặt cao hơn con số %: bỏ sót tin kh�
 
 ```mermaid
 flowchart TD
-    A["data/discord-pack/*.txt<br/>export thông báo Discord"] --> B["load_announcements()<br/>cắt thành block, gắn id 'file.txt#N'"]
+    A["data/discord-pack/*.txt<br/>export thông báo Discord"] --> B["discord_store.all_messages()<br/>gộp pack + thông báo mô phỏng, gắn id 'kênh#N'"]
+    A2["store/discord_inbox.json<br/>thông báo LabCoach/BTC đẩy lúc chạy"] --> B
     B --> C["_prompt()<br/>ghim ngày tham chiếu + 6 quy tắc bắt buộc"]
-    C --> D{{"Gemini API<br/>temperature 0.1 · JSON mode"}}
+    C --> D{{"Gemini API<br/>temperature 0.1 · JSON mode<br/>đổi model khi hết quota ngày"}}
     D --> E["_extract_json()<br/>lỗi format → RuntimeError, KHÔNG đoán"]
     E --> F["_ground() — guard tất định<br/>kiểm từng action item"]
-    F -->|"source_id có thật<br/>VÀ evidence là chuỗi con nguyên văn<br/>VÀ confidence = high"| G["action_items<br/>→ tab Hôm nay / Công việc của tôi"]
+    F -->|"source_id có thật<br/>VÀ evidence là chuỗi con nguyên văn<br/>VÀ confidence = high"| G["action_items<br/>→ tab Hôm nay"]
     F -->|"thiếu bất kỳ điều kiện nào"| H["needs_confirmation<br/>→ tab Cần xác thực + câu hỏi gửi TA"]
     G --> I["logs/agent_runs.jsonl<br/>trace: model · source_count · số action"]
     H --> I

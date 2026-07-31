@@ -1,114 +1,133 @@
-Bất kỳ lỗi nào về trang codelabs.vlearn.dev ping @Lab Coach - HoangHTB  ở ⁠[Điểm danh và chuyên cần] Thông… 
-cú pháp:
-Tên + MSSV + Email vin + Lỗi + hình chụp màn hình lỗi
-Quy trình làm và nộp bài lab
-1 Fork bài lab đặt ĐÚNG TÊN  https://codelabs.vlearn.dev/tips/huong-dan-tai-bai-lab
-Làm bài và COMMIT PUSH lên lab đấy
-Nộp bài lab tại codelabs chọn bài labs tương ứng
+﻿---
+date: 30/7/2026
+message: |
+  Bất kỳ lỗi nào về trang codelabs.vlearn.dev ping @Lab Coach - HoangHTB  ở ⁠[Điểm danh và chuyên cần] Thông…
+  cú pháp:
+  Tên + MSSV + Email vin + Lỗi + hình chụp màn hình lỗi
+  Quy trình làm và nộp bài lab
+  1 Fork bài lab đặt ĐÚNG TÊN  https://codelabs.vlearn.dev/tips/huong-dan-tai-bai-lab
+  Làm bài và COMMIT PUSH lên lab đấy
+  Nộp bài lab tại codelabs chọn bài labs tương ứng
 
 
+---
+date: 30/7/2026
+message: |
+  đã ra mắt tính năng chuyển cohort, hạn tới chủ nhật, những con chiêm nào lầm lỡ click nhầm thì có thể chuyển nhá
 
 
-
-đã ra mắt tính năng chuyển cohort, hạn tới chủ nhật, những con chiêm nào lầm lỡ click nhầm thì có thể chuyển nhá
-
-
-
-thông báo gia hạn lịch nộp bài lab hôm nay ngày 30/7 thêm 24h, tuy nhiên bạn nào nộp trễ sẽ bị trừ 20% số điểm, 
-những buổi sau bài lab sẽ đóng đúng 23h59 mỗi ngày và không mở lại, các bạn nhớ nộp lab đúng giờ.
+---
+date: 30/7/2026
+message: |
+  thông báo gia hạn lịch nộp bài lab hôm nay ngày 30/7 thêm 24h, tuy nhiên bạn nào nộp trễ sẽ bị trừ 20% số điểm,
+  những buổi sau bài lab sẽ đóng đúng 23h59 mỗi ngày và không mở lại, các bạn nhớ nộp lab đúng giờ.
 
 
-
-Slide ngày 1 và ngày 2 đã có trên vlearn.dev rồi nha !!! 
-Xin lỗi mọi người vì sự bất tiện này !!
-Chúc mọi người cuối tuần vui vẻ!
-
-
-Codelabs cập nhật v0.0.5
-Sửa lỗi không hiển thị lượt nộp bài
-Sửa faqs, cập nhật các câu hỏi phổ biến
-Thêm tính năng feedback cho bài labs, labcoaches, websites
-+ https://codelabs.vlearn.dev/feedback?subject=lab&lab=day1-lab-llm-api-foundation (feedback labs)
-+ https://codelabs.vlearn.dev/feedback?subject=platform&lab=day1-lab-llm-api-foundation (feedback website)
-Sửa lại logo, brand, 1 số component và lỗi UI lặt vặt
-
-codelabs là dự án được khởi công cùng ngày với ngày K3/K4 khai giảng, mang tinh thần thực chiến, cháy cùng với K3/K4, kim chỉ nam của web là: bắt đầu từ web đơn giản nhất, và sẽ cải thiện theo ý muốn, nhu cầu của các bạn học viên, đặt trải nghiệm học viên lên đầu. Cảm ơn feedback của mọi người trong các ngày vừa qua đã giúp mình dần hoàn thiện codelabs, 
-thay mặt team codelabs mình xin chân thành cảm ơn đóng góp của tất cả các bạn ❤️
+---
+date: 30/7/2026
+message: |
+  Slide ngày 1 và ngày 2 đã có trên vlearn.dev rồi nha !!!
+  Xin lỗi mọi người vì sự bất tiện này !!
+  Chúc mọi người cuối tuần vui vẻ!
 
 
+---
+date: 30/7/2026
+message: |
+  Codelabs cập nhật v0.0.5
+  Sửa lỗi không hiển thị lượt nộp bài
+  Sửa faqs, cập nhật các câu hỏi phổ biến
+  Thêm tính năng feedback cho bài labs, labcoaches, websites
+  + https://codelabs.vlearn.dev/feedback?subject=lab&lab=day1-lab-llm-api-foundation (feedback labs)
+  + https://codelabs.vlearn.dev/feedback?subject=platform&lab=day1-lab-llm-api-foundation (feedback website)
+  Sửa lại logo, brand, 1 số component và lỗi UI lặt vặt
+  
+  codelabs là dự án được khởi công cùng ngày với ngày K3/K4 khai giảng, mang tinh thần thực chiến, cháy cùng với K3/K4, kim chỉ nam của web là: bắt đầu từ web đơn giản nhất, và sẽ cải thiện theo ý muốn, nhu cầu của các bạn học viên, đặt trải nghiệm học viên lên đầu. Cảm ơn feedback của mọi người trong các ngày vừa qua đã giúp mình dần hoàn thiện codelabs,
+  thay mặt team codelabs mình xin chân thành cảm ơn đóng góp của tất cả các bạn ❤️
 
 
-các bài nào ở ⁠🏆-chia-sẻ  có liên quan đến support codelabs (cài môi trường, tips, mẹo...) các bạn có thể ping mình vào, mình sẽ đưa lên tips ở codelabs và ghi tên các bạn là author nha. Ty mn nhiềuuu
+---
+date: 30/7/2026
+message: |
+  các bài nào ở ⁠🏆-chia-sẻ  có liên quan đến support codelabs (cài môi trường, tips, mẹo...) các bạn có thể ping mình vào, mình sẽ đưa lên tips ở codelabs và ghi tên các bạn là author nha. Ty mn nhiềuuu
 
 
+---
+date: 30/7/2026
+message: |
+  AI Thực Chiến: Venture Arena
+  
+  Build · Pitch · Invest — biến dữ liệu thành giải pháp AI cho hành trình học tập.
+  
+  Mọi startup đều bắt đầu từ một cú lao vào vùng nước sâu.
+  
+  Không phải vì họ chắc chắn sẽ thắng. Không phải vì thị trường đã mở đường. Mà vì họ nhìn thấy một pain point đủ lớn, một cơ hội đủ sắc, và họ không thể đứng ngoài nhìn nó trôi qua.
+  
+  Đó là bản năng của những “cá mập đói”: nhìn thấy khoảng trống nơi người khác chỉ thấy sự hỗn độn; lao vào một vấn đề khó, cắn chặt lấy nó, và không dừng lại cho đến khi biến nó thành giá trị.
+  
+  Tại AI Thực Chiến, chúng tôi đã nhìn thấy rất nhiều những cá mập như vậy.
+  
+  Các bạn không chỉ học cách gọi một mô hình AI, viết một prompt hay dựng một chatbot. Các bạn bắt đầu nhìn sâu hơn vào hành trình thật của người học: một câu hỏi chưa được giải đáp đúng lúc, một kiến thức bị đứt mạch sau bài giảng, một cuộc hội thoại kéo dài trên Discord, hay một người học âm thầm rời đi vì chưa tìm được đúng sự hỗ trợ.
+  Xin tuyên bố, mini-hackathon Venture Arena sẽ được bắt đầu vào 10h ngày 30/7, và kéo dài đến trưa mai ngày 31/7. Mọi người nhanh chân đến lớp nhá. @everyone
 
 
-AI Thực Chiến: Venture Arena
-
-Build · Pitch · Invest — biến dữ liệu thành giải pháp AI cho hành trình học tập.
-
-Mọi startup đều bắt đầu từ một cú lao vào vùng nước sâu.
-
-Không phải vì họ chắc chắn sẽ thắng. Không phải vì thị trường đã mở đường. Mà vì họ nhìn thấy một pain point đủ lớn, một cơ hội đủ sắc, và họ không thể đứng ngoài nhìn nó trôi qua.
-
-Đó là bản năng của những “cá mập đói”: nhìn thấy khoảng trống nơi người khác chỉ thấy sự hỗn độn; lao vào một vấn đề khó, cắn chặt lấy nó, và không dừng lại cho đến khi biến nó thành giá trị.
-
-Tại AI Thực Chiến, chúng tôi đã nhìn thấy rất nhiều những cá mập như vậy.
-
-Các bạn không chỉ học cách gọi một mô hình AI, viết một prompt hay dựng một chatbot. Các bạn bắt đầu nhìn sâu hơn vào hành trình thật của người học: một câu hỏi chưa được giải đáp đúng lúc, một kiến thức bị đứt mạch sau bài giảng, một cuộc hội thoại kéo dài trên Discord, hay một người học âm thầm rời đi vì chưa tìm được đúng sự hỗ trợ.
-Xin tuyên bố, mini-hackathon Venture Arena sẽ được bắt đầu vào 10h ngày 30/7, và kéo dài đến trưa mai ngày 31/7. Mọi người nhanh chân đến lớp nhá. @everyone
-
-
-Các team làm về bài toán vlearn có thể feedback và kiểm chứng evidence với team vlearn ở ⁠Feedback, bug report vlearn.dev 
-
-Format feedback:
-Bug report: lỗi ở trang nào, quá trình nào, nhắn tin ra sao, để cho vlearn có thể reproduce bug
-Feature propose: đề xuất tính năng nào, vì sao, triển khai vào vlearn như nào
-Feedback: cần xin í kiến về abc,xyz...
-
-Team vlearn trả lời có [Confirm idea | Confirm painpoint] mọi người có thể dùng đó làm evidence sắc bén nhất cho sản phẩm. 
-
-Lưu ý: những bug | idea đã được propose rồi thì team vlearn có thể tuỳ chọn trả lời hoặc không, cho nên các team hãy tận dụng thật nhanh nhá, first come first serve
-
-Một bonus point cực lớn cho các team có pilot path vào vlearn nhá
-
-Những cái tên mn có thể ping
-@Lab Coach — Sang  -> feature, product owner, UI UX
-@Lab Coach - Đôn Đức  @Lab Coach - Rin  -> adaptive learning, KC (knowledge component), AI chatbot
-@Lab Coach - Hải Văn -> hạ tầng, infra, latency,...
-@Lab Coach-Mê Linh @Lab Coach - Nam Lê  -> slide trong vlearn
-
-Chúc mọi người thi tốt.
-
-Link checkpoint 2: https://forms.gle/Y9sVoXPNWSFQe3tt7
+---
+date: 30/7/2026
+message: |
+  Các team làm về bài toán vlearn có thể feedback và kiểm chứng evidence với team vlearn ở ⁠Feedback, bug report vlearn.dev
+  
+  Format feedback:
+  Bug report: lỗi ở trang nào, quá trình nào, nhắn tin ra sao, để cho vlearn có thể reproduce bug
+  Feature propose: đề xuất tính năng nào, vì sao, triển khai vào vlearn như nào
+  Feedback: cần xin í kiến về abc,xyz...
+  
+  Team vlearn trả lời có [Confirm idea | Confirm painpoint] mọi người có thể dùng đó làm evidence sắc bén nhất cho sản phẩm.
+  
+  Lưu ý: những bug | idea đã được propose rồi thì team vlearn có thể tuỳ chọn trả lời hoặc không, cho nên các team hãy tận dụng thật nhanh nhá, first come first serve
+  
+  Một bonus point cực lớn cho các team có pilot path vào vlearn nhá
+  
+  Những cái tên mn có thể ping
+  @Lab Coach — Sang  -> feature, product owner, UI UX
+  @Lab Coach - Đôn Đức  @Lab Coach - Rin  -> adaptive learning, KC (knowledge component), AI chatbot
+  @Lab Coach - Hải Văn -> hạ tầng, infra, latency,...
+  @Lab Coach-Mê Linh @Lab Coach - Nam Lê  -> slide trong vlearn
+  
+  Chúc mọi người thi tốt.
+  
+  Link checkpoint 2: https://forms.gle/Y9sVoXPNWSFQe3tt7
 
 
+---
+date: 30/7/2026
+message: |
+  @Learner
+  Data về slide vlearn đã được up lên repo nhá mọi người, các team clone về để sử dụng nhaaaa.
+  Team nào nhận được thông tin cho mình xin một react ❤️ nhá
+  Chiều nay các team ngồi phòng lý thuyết vẫn có các bạn labcoach, vlearn, chatbot đi hỗ trợ từng phòng nhá. Hoặc mn có thể nhắn vào ⁠Feedback, bug report vlearn.dev  ⁠Hỗ trợ chatbot  để được các team hỗ trợ nhá
+  Team chatbot gồm @Lab Coach - Thiếu Uý Khang , bạn Tiển, 2 a Cường và a ODIN (2 a chỉ trả lời trong scope discord thôi) và mình nhá.
+  
+  https://github.com/VinUni-AI20k/Batch03-K3-AI-Product-Hackathon
 
 
-@Learner 
-Data về slide vlearn đã được up lên repo nhá mọi người, các team clone về để sử dụng nhaaaa.
-Team nào nhận được thông tin cho mình xin một react ❤️ nhá
-Chiều nay các team ngồi phòng lý thuyết vẫn có các bạn labcoach, vlearn, chatbot đi hỗ trợ từng phòng nhá. Hoặc mn có thể nhắn vào ⁠Feedback, bug report vlearn.dev  ⁠Hỗ trợ chatbot  để được các team hỗ trợ nhá
-Team chatbot gồm @Lab Coach - Thiếu Uý Khang , bạn Tiển, 2 a Cường và a ODIN (2 a chỉ trả lời trong scope discord thôi) và mình nhá. 
-
-https://github.com/VinUni-AI20k/Batch03-K3-AI-Product-Hackathon
-
-
-Cổng nộp bài đã mở, các team nhanh chóng nộp link github của mình nhá (mỗi thành viên đều phải nộp)
-Team có thể commit thoải mái cho tới ngày demo, nên mình nhanh chóng nộp sớm để đỡ quên nha
-Chúc các team làm bài suôn sẻ, và bùng cháy 🔥 
-Deadline nộp sẽ là 23h59p ngày 30/7, tuy nhiên có thể tiếp tục commit tới ngày mai ngày 31/7
- @Learner
-
-⏰ Nhắc nhở Daily Stand-up!
-Đội chưa hoàn thành stand-up hôm nay (2026-07-30).
-2/4 thành viên đã nộp
-📝 Hướng dẫn
-Mỗi thành viên dùng lệnh /daily với:
-• yesterday — Hôm qua làm gì
-• today — Hôm nay sẽ làm gì
-• blocker — Vấn đề gặp phải (nếu có)
-
-team codelabs (cụ thể là mình) đang có 1 pain point là cần thống nhất được bài các bạn labcoach gửi để đưa lên web cần chung format, dễ đọc, dễ hiểu cho mn và không bị AI slop
-team nào giải quyết bài toán này thì ping mình nhá, có thể là 1 skills, nghiên cứu về giáo dục, hướng dẫn guide như nào cho hiệu quả
+---
+date: 30/7/2026
+message: |
+  Cổng nộp bài đã mở, các team nhanh chóng nộp link github của mình nhá (mỗi thành viên đều phải nộp)
+  Team có thể commit thoải mái cho tới ngày demo, nên mình nhanh chóng nộp sớm để đỡ quên nha
+  Chúc các team làm bài suôn sẻ, và bùng cháy 🔥
+  Deadline nộp sẽ là 23h59p ngày 30/7, tuy nhiên có thể tiếp tục commit tới ngày mai ngày 31/7
+   @Learner
+  
+  ⏰ Nhắc nhở Daily Stand-up!
+  Đội chưa hoàn thành stand-up hôm nay (2026-07-30).
+  2/4 thành viên đã nộp
+  📝 Hướng dẫn
+  Mỗi thành viên dùng lệnh /daily với:
+  • 30/7/2026 — 30/7/2026 làm gì
+  • today — Hôm nay sẽ làm gì
+  • blocker — Vấn đề gặp phải (nếu có)
+  
+  team codelabs (cụ thể là mình) đang có 1 pain point là cần thống nhất được bài các bạn labcoach gửi để đưa lên web cần chung format, dễ đọc, dễ hiểu cho mn và không bị AI slop
+  team nào giải quyết bài toán này thì ping mình nhá, có thể là 1 skills, nghiên cứu về giáo dục, hướng dẫn guide như nào cho hiệu quả
 

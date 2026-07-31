@@ -15,5 +15,8 @@ htmlcov/
 
 # Streamlit local configuration and runtime state
 .streamlit/secrets.toml
-codebase/logs/*.jsonl
-!codebase/logs/.gitkeep
+logs/*.jsonl
+!logs/.gitkeep
+
+# Kho thông báo mô phỏng + trạng thái Codelabs sinh ra lúc chạy
+store/
