@@ -200,12 +200,21 @@ def plan_content() -> str:
     return f'<div class="card"><div class="section-title">Kế hoạch đề xuất</div>{plans}</div>'
 
 
+def toggle_done(task_id: str, key: str) -> None:
+    """Callback chạy trước khi màn hình vẽ lại, nên sidebar và hai danh sách luôn khớp tick."""
+    set_done(task_id, st.session_state[key])
+
+
 def task_row(task: dict, completed: bool) -> None:
     """Mỗi việc chỉ nằm ở đúng một danh sách, theo trạng thái checkbox hiện tại."""
+    key = f"task_toggle_{task['id']}"
+    # completed_task_ids là nguồn sự thật duy nhất. Streamlit ưu tiên giá trị cũ của key
+    # hơn tham số value, nên phải gán lại trước khi vẽ: không có dòng này thì tick vẫn
+    # hiện checked sau khi đặt lại phiên hoặc quét lại, dù người dùng chưa click gì.
+    st.session_state[key] = completed
     check, body, badge = st.columns([0.45, 6.7, 1.25], vertical_alignment="top")
     with check:
-        checked = st.checkbox("Hoàn thành", value=completed, key=f"task_toggle_{task['id']}", label_visibility="collapsed")
-        set_done(task["id"], checked)
+        st.checkbox("Hoàn thành", key=key, on_change=toggle_done, args=(task["id"], key), label_visibility="collapsed")
     with body:
         title_style = "text-decoration:line-through;color:#9ba3b3" if completed else ""
         evidence = task.get("evidence", "")
