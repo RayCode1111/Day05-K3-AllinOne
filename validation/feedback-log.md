@@ -25,10 +25,17 @@
 
 ## Bốn dòng tổng hợp
 
-- **Chủ đề lặp nhiều nhất:**
-- **1-2 thay đổi làm trước demo** *(chép sang `spec.md` §9 Changelog):*
-- **Giữ nguyên có lý do:**
-- **Đưa vào backlog** *(lên slide 6):*
+- **Chủ đề lặp nhiều nhất:** ⚠️ *(điền sau khi log đủ 5 mẩu — đọc lại cột Quote rồi gom, đừng viết trước)*
+
+- **1-2 thay đổi làm trước demo** *(chép sang `spec.md` §9 Changelog):* ⚠️ *(điền — R6 chấm cao hơn cho thay đổi có thật so với lý do giữ nguyên)*
+
+- **Giữ nguyên có lý do** *(ba quyết định này đã chép sang `spec.md` §9, dòng "CP5 — GIỮ NGUYÊN")*:
+
+  1. **Không gộp mục *Cần xác thực* vào cuối danh sách việc.** Gộp lại xoá mất ranh giới giữa việc đã qua guard `_ground()` (có trích dẫn nguyên văn đỡ) và việc chưa đủ căn cứ. Người dùng này đã mute một kênh vì nó trộn lẫn tin quan trọng với tin thường — trộn lại lần nữa, lần này giữa *chắc* và *không chắc*, là lặp lại đúng lỗi đó ở mức nguy hiểm hơn. Bù lại: số mục cần xác nhận đã hiện sẵn trên thẻ hero màn *Hôm nay*.
+  2. **Không để Nova tự chốt giờ cho cặp `thong-bao#15` / `#16`** (Workshop 4: 20:00 vs 19:00). Không có đáp án đúng trong data — cả hai đều là thông báo chính thức. Đoán đúng thì người học đỡ một câu hỏi; đoán sai thì họ vào Zoom sai giờ và mất điểm danh, không sửa được. Nova đặt hai trích dẫn cạnh nhau kèm câu hỏi soạn sẵn.
+  3. **Không thêm luật prompt để sửa case G22.** Luật mới sẽ kéo cả nhóm tin hướng dẫn thao tác lên bản tin và làm bản tin dài ra — đúng thứ sản phẩm sinh ra để chống. `eval/rubric-cham.md` đã khai trước rằng loại nhầm này chấp nhận được. Đường lui đã có: cửa sổ 💬 Discord liệt kê cả tin bị lọc.
+
+- **Đưa vào backlog** *(lên slide 6):* ⚠️ *(điền)*
 
 ## Gợi ý chỗ nên soi khi quan sát
 

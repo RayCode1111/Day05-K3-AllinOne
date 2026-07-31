@@ -17,11 +17,6 @@ message: |
 
 
 ---
-date: 30/7/2026
-message: |
-  thông báo gia hạn lịch nộp bài lab hôm nay ngày 30/7 thêm 24h, tuy nhiên bạn nào nộp trễ sẽ bị trừ 20% số điểm,
-  những buổi sau bài lab sẽ đóng đúng 23h59 mỗi ngày và không mở lại, các bạn nhớ nộp lab đúng giờ.
-
 
 ---
 date: 30/7/2026

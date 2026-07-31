@@ -91,17 +91,17 @@ Tiêu chí đếm — viết ra để tranh luận được, không giấu trong
 
 | Chỉ số | Giá trị |
 |---|---|
-| Tổng số thông báo trong pack | 29 |
-| Tin có việc phải làm kèm hạn | 7/29 = 24.1% |
-| Tin ping cả lớp (@everyone/@here/@Learner) | 13/29 = 44.8% |
+| Tổng số thông báo trong pack | 28 |
+| Tin có việc phải làm kèm hạn | 6/28 = 21.4% |
+| Tin ping cả lớp (@everyone/@here/@Learner) | 13/28 = 46.4% |
 | **Tin ping cả lớp nhưng KHÔNG kèm việc phải làm** | **11/13 = 85%** |
-| Độ dài thông báo (trung bình · trung vị · dài nhất) | 557 · 475 · 1816 ký tự |
-| Thông báo dài hơn 500 ký tự | 14/29 |
+| Độ dài thông báo (trung bình · trung vị · dài nhất) | 625 · 579 · 1941 ký tự |
+| Thông báo dài hơn 500 ký tự | 17/28 |
 
 **Hai con số đáng giá nhất:**
 
 1. **11/13 (85%) tin ping cả lớp không kèm việc phải làm.** Đây là bằng chứng **độc lập với khảo sát** cho đúng nguyên nhân mà 7/11 người khảo sát khai là lý do họ phải mute. Khảo sát nói người dùng *cảm thấy* bị spam; pack cho thấy họ *bị spam thật*.
-2. **Thông báo dài trung bình 557 ký tự, 14/29 tin dài hơn 500 ký tự.** Chỉ 7/29 tin thật sự có việc phải làm — tức là học viên phải đọc rất nhiều chữ để tìm ra phần nhỏ thật sự liên quan tới mình. Đó đúng là việc mà bản tin lọc gánh hộ.
+2. **Thông báo dài trung bình 625 ký tự, 17/28 tin dài hơn 500 ký tự.** Chỉ 6/28 tin thật sự có việc phải làm — tức là học viên phải đọc rất nhiều chữ để tìm ra phần nhỏ thật sự liên quan tới mình. Đó đúng là việc mà bản tin lọc gánh hộ.
 
 **Chỉ số đã thử nhưng KHÔNG dùng — khai để khỏi bị hiểu là chọn số đẹp:** nhóm định đo *"hạn chót bị chôn sâu trong thân bài"*, nhưng đo ra hạn xuất hiện trung bình ở **23%** chiều dài tin và chỉ **1/7** tin phải đọc quá nửa mới thấy hạn. Giả thuyết đó **không được data ủng hộ**, nên bỏ, không đưa vào spec.
 
